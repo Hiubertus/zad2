@@ -10,8 +10,9 @@ ARG VERSION
 ENV APP_VER=production.${VERSION:-v1.0}
 LABEL maintainer="Hubert Ozarowski s97692@pollub.edu.pl"
 
-RUN apk update && \
-    apk upgrade && 
+RUN apk add --no-cache npm curl
+    # apk update && \
+    # apk upgrade && \
     # apk add --no-cache \
     # nodejs-current=21.7.3-r0 \
     # npm=10.8.0-r0 \
