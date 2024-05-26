@@ -62,14 +62,16 @@ jobs:
           if [ -s high_critical_vulns.json ]; then
             echo "High or critical vulnerabilities found"
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-            docker image rm -f ${{ steps.meta.outputs.tags }}Test
-            dockerlogout
+            docker image rmi ${{ steps.meta.outputs.tags }}Test
+            docker image rmi ${{ vars.DOCKERHUB_USERNAME }}/zad2t:cacheTest
+            docker logout
             exit 1
           else
             echo "No high or critical vulnerabilities found"
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-            docker image rm -f ${{ steps.meta.outputs.tags }}Test
-            dockerlogout
+            docker image rmi ${{ steps.meta.outputs.tags }}Test
+            docker image rmi ${{ vars.DOCKERHUB_USERNAME }}/zad2t:cacheTest
+            docker logout
           fi
 
       - name: Push Docker image to DockerHub
