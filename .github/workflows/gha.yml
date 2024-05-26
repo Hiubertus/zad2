@@ -24,6 +24,8 @@ jobs:
           tags: |
             type=sha,priority=100,prefix=sha-,format=short
             type=semver,priority=200,pattern={{version}}
+
+
       - name: Docker metadata definitions
         id: meta2
         uses: docker/metadata-action@v5
@@ -73,19 +75,19 @@ jobs:
       #       exit 1
       #     fi
 
-      - name: Push Docker image to DockerHub
-        if: success()  # Only run if the previous step was successful
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          cache-from: |
-            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
-          cache-to: |
-            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
-          tags: ${{ steps.meta2.outputs.tags }}
+      # - name: Push Docker image to DockerHub
+      #   if: success()  # Only run if the previous step was successful
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     file: ./Dockerfile
+      #     platforms: linux/amd64,linux/arm64
+      #     push: true
+      #     cache-from: |
+      #       type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
+      #     cache-to: |
+      #       type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
+      #     tags: ${{ steps.meta2.outputs.tags }}
 
       - name: Login to GitHub Container Registry
         if: success()  # Only run if the previous step was successful
