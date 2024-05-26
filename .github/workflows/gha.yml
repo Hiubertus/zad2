@@ -76,7 +76,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           cache-from: |
-            type=registry,ref=ghcr.io/${{ github.repository }}/zad2:cache
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           cache-to: |
-            type=registry,ref=ghcr.io/${{ github.repository }}/zad2:cache
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           tags: ${{ steps.meta.outputs.tags }}
