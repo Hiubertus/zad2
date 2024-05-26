@@ -61,11 +61,15 @@ jobs:
           jq '.vulnerabilities | .[] | select(.severity == "HIGH" or .severity == "CRITICAL")' scout_report.json > high_critical_vulns.json
           if [ -s high_critical_vulns.json ]; then
             echo "High or critical vulnerabilities found"
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
             docker image rm -f ${{ steps.meta.outputs.tags }}Test
+            dockerlogout
             exit 1
           else
             echo "No high or critical vulnerabilities found"
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
             docker image rm -f ${{ steps.meta.outputs.tags }}Test
+            dockerlogout
           fi
 
       - name: Push Docker image to DockerHub
