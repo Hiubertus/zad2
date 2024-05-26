@@ -43,7 +43,7 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: true
+          push: false
           cache-from: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           cache-to: |
@@ -57,7 +57,26 @@ jobs:
       - name: Scan Docker image for vulnerabilities using Docker Scout
         id: scout
         run: |
-          docker scout cves ${{ steps.meta.outputs.tags }}
+          docker scout cves ${{ steps.meta.outputs.tags }} --output json | tee scout_report.json
+          jq '.vulnerabilities | .[] | select(.severity == "HIGH" or .severity == "CRITICAL")' scout_report.json > high_critical_vulns.json
+          if [ -s high_critical_vulns.json ]; then
+            echo "High or critical vulnerabilities found"
+            exit 1
+          fi
+          
+      - name: Push Docker image to DockerHub
+        if: success()  # Only run if the previous step was successful
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          cache-from: |
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
+          cache-to: |
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
+          tags: ${{ steps.meta.outputs.tags }}
 
       - name: Login to GitHub Container Registry
         if: success()  # Only run if the previous step was successful
