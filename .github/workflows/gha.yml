@@ -61,13 +61,12 @@ jobs:
           jq '.vulnerabilities | .[] | select(.severity == "HIGH" or .severity == "CRITICAL")' scout_report.json > high_critical_vulns.json
           if [ -s high_critical_vulns.json ]; then
             echo "High or critical vulnerabilities found"
+            docker image rm -f ${{ steps.meta.outputs.tags }}Test
             exit 1
+          else
+            echo "No high or critical vulnerabilities found"
+            docker image rm -f ${{ steps.meta.outputs.tags }}Test
           fi
-
-        - name: Delete Docker image from DockerHub (Test tag)
-        id: deleting test image
-        run: |
-          docker image rm -f ${{ steps.meta.outputs.tags }}Test
 
       - name: Push Docker image to DockerHub
         if: success()  # Only run if the previous step was successful
