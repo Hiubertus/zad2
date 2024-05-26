@@ -1,0 +1,16 @@
+docker login
+
+docker scout repo enable --org patheticx patheticx/zad1
+
+docker buildx build \
+--platform linux/amd64,linux/arm64 \
+--cache-from=type=registry,ref=patheticx/zad1:cacheNormal \
+--cache-to=type=registry,ref=patheticx/zad1:cacheNormal \
+--sbom=true \
+--provenance=mode=max \
+--push \
+-t patheticx/zad1:normal .
+
+docker scout cves patheticx/zad1:normal                          
+
+docker run -p 8080:4000 patheticx/zad1:normal
