@@ -16,7 +16,16 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Docker metadata definitions
-        id: meta
+        id: meta1
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ vars.DOCKERHUB_USERNAME }}/test
+          flavor: latest=false
+          tags: |
+            type=sha,priority=100,prefix=sha-,format=short
+            type=semver,priority=200,pattern={{version}}
+      - name: Docker metadata definitions
+        id: meta2
         uses: docker/metadata-action@v5
         with:
           images: ${{ vars.DOCKERHUB_USERNAME }}/zad2
@@ -45,10 +54,10 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           cache-from: |
-            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/test:cache
           cache-to: |
-            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
-          tags: ${{ steps.meta.outputs.tags }}
+            type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/test:cache
+          tags: ${{ steps.meta1.outputs.tags }}
 
       - name: Install Docker Scout
         run: |
@@ -57,7 +66,7 @@ jobs:
       - name: Scan Docker image for vulnerabilities using Docker Scout
         id: scout
         run: |
-          docker scout cves ${{ steps.meta.outputs.tags }} --output json | tee scout_report.json
+          docker scout cves ${{ steps.meta1.outputs.tags }} --output json | tee scout_report.json
           jq '.vulnerabilities | .[] | select(.severity == "HIGH" or .severity == "CRITICAL")' scout_report.json > high_critical_vulns.json
           if [ -s high_critical_vulns.json ]; then
             echo "High or critical vulnerabilities found"
@@ -76,7 +85,7 @@ jobs:
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           cache-to: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta2.outputs.tags }}
 
       - name: Login to GitHub Container Registry
         if: success()  # Only run if the previous step was successful
@@ -98,4 +107,4 @@ jobs:
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           cache-to: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta2.outputs.tags }}
