@@ -57,7 +57,7 @@ jobs:
       - name: Scan Docker image for vulnerabilities using Docker Scout
         id: scout
         run: |
-          docker scout cves ${{ vars.DOCKERHUB_USERNAME }}/zad2:$(echo ${{ steps.meta.outputs.tags }} | cut -d',' -f1) --exit-code 1 --severity high,critical
+          docker scout cves ${{ vars.DOCKERHUB_USERNAME }}/zad2:$(echo ${{ steps.meta.outputs.tags }} | cut -d',' -f1) --exit-code 1
 
       - name: Login to GitHub Container Registry
         if: success()  # Only run if the previous step was successful
