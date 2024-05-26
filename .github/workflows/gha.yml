@@ -64,6 +64,11 @@ jobs:
             exit 1
           fi
 
+        - name: Delete Docker image from DockerHub (Test tag)
+        id: deleting test image
+        run: |
+          docker image rm -f ${{ steps.meta.outputs.tags }}Test
+
       - name: Push Docker image to DockerHub
         if: success()  # Only run if the previous step was successful
         uses: docker/build-push-action@v5
