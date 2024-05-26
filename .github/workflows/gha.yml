@@ -48,7 +48,7 @@ jobs:
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           cache-to: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/zad2:${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
 
       - name: Install Docker Scout
         run: |
@@ -57,7 +57,7 @@ jobs:
       - name: Scan Docker image for vulnerabilities using Docker Scout
         id: scout
         run: |
-          docker scout cves ${{ vars.DOCKERHUB_USERNAME }}/zad2:${{ steps.meta.outputs.tags }}
+          docker scout cves ${{ steps.meta.outputs.tags }}
 
       - name: Login to GitHub Container Registry
         if: success()  # Only run if the previous step was successful
