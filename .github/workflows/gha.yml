@@ -79,4 +79,4 @@ jobs:
             type=registry,ref=ghcr.io/${{ github.repository }}/zad2:cache
           cache-to: |
             type=registry,ref=ghcr.io/${{ github.repository }}/zad2:cache
-          tags: ghcr.io/${{ github.repository }}/zad2:${{ steps.meta.outputs.tags }}
+          tags: ${{ steps.meta.outputs.tags }}
