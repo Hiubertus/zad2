@@ -15,7 +15,7 @@ RUN apk update && \
     apk add --no-cache \
     nodejs-current=21.7.3-r0 \
     npm=10.8.0-r0 \
-    curl=8.8.0-r0 \
+#    curl=8.8.0-r0 \
     busybox=1.36.1-r28 \ 
     openssl=3.3.0-r2 \ 
     --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
