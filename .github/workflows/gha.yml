@@ -43,7 +43,7 @@ jobs:
           context: .
           file: ./Dockerfile
           platforms: linux/amd64,linux/arm64
-          push: false
+          push: true
           cache-from: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           cache-to: |
@@ -63,7 +63,7 @@ jobs:
             echo "High or critical vulnerabilities found"
             exit 1
           fi
-          
+
       - name: Push Docker image to DockerHub
         if: success()  # Only run if the previous step was successful
         uses: docker/build-push-action@v5
