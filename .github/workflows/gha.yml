@@ -104,5 +104,4 @@ jobs:
       - name: Delete Docker image from DockerHub
         if: always()
         run: |
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/zad2:${{ steps.meta.outputs.tags }}Test
+          docker rmi -f ${{ steps.meta.outputs.tags }}Test
