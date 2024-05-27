@@ -104,4 +104,4 @@ jobs:
       - name: Delete Docker image from DockerHub
         if: always()
         run: |
-          docker rmi -f ${{ steps.meta.outputs.tags }}Test
+          docker rmi -f ${{ vars.DOCKERHUB_USERNAME }}/zad2:cacheTest 
