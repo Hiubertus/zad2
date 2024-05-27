@@ -99,8 +99,8 @@ jobs:
           cache-to: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           tags: ${{ steps.meta.outputs.tags }}
-          
+
       - name: Delete image
         run: |
-          docker image rmi ${{ steps.meta.outputs.tags }}Test ${{ vars.DOCKERHUB_USERNAME }}/zad2t:cacheTest
+          docker image rm ${{ steps.meta.outputs.tags }}Test ${{ vars.DOCKERHUB_USERNAME }}/zad2t:cacheTest
 
