@@ -55,14 +55,13 @@ jobs:
       - name: Scan Docker image for vulnerabilities using Docker Scout
         id: scout
         run: |
-          docker scout cves ${{ steps.meta.outputs.tags }}Test --output json | tee scout_report.json
-          jq '.vulnerabilities | .[] | select(.severity == "HIGH" or .severity == "CRITICAL")' scout_report.json > high_critical_vulns.json
-          if [ -s high_critical_vulns.json ]; then
+          docker scout quickview ${{ steps.meta.outputs.tags }}Test --output json > scout_report.json
+          high_critical_vulns=$(jq '[.vulnerabilities[] | select(.severity == "HIGH" or .severity == "CRITICAL")] | length' scout_report.json)
+          if [ "$high_critical_vulns" -gt 0 ]; then
             echo "High or critical vulnerabilities found"
             exit 1
-          else 
-            exit 1
           fi
+
 
       - name: Push Docker image to DockerHub
         if: success()  # Only run if the previous step was successful
