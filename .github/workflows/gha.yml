@@ -61,12 +61,9 @@ jobs:
           jq '.vulnerabilities | .[] | select(.severity == "HIGH" or .severity == "CRITICAL")' scout_report.json > high_critical_vulns.json
           if [ -s high_critical_vulns.json ]; then
             echo "High or critical vulnerabilities found"
-            docker image rm ${{ steps.meta.outputs.tags }}Test ${{ vars.DOCKERHUB_USERNAME }}/zad2:cacheTest
             exit 1
-          else 
-            docker image rm ${{ steps.meta.outputs.tags }}Test ${{ vars.DOCKERHUB_USERNAME }}/zad2:cacheTest
           fi
-      
+
       - name: Push Docker image to DockerHub
         if: success()  # Only run if the previous step was successful
         uses: docker/build-push-action@v5
@@ -102,5 +99,3 @@ jobs:
           cache-to: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           tags: ${{ steps.meta.outputs.tags }}
-
-
