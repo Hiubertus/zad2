@@ -55,11 +55,14 @@ jobs:
       - name: Scan Docker image for vulnerabilities using Docker Scout
         id: scout
         run: |
-          docker scout quickview ${{ steps.meta.outputs.tags }}Test --output json > scout_report.json
-          high_critical_vulns=$(jq '[.vulnerabilities[] | select(.severity == "HIGH" or .severity == "CRITICAL")] | length' scout_report.json)
+          output=$(docker scout quickview ${{ steps.meta.outputs.tags }}Test)
+          relevant_part=$(echo "$output" | sed -n 's/.*│\(.*\)digest.*/\1/p')
+          high_critical_vulns=$(echo "$relevant_part" | grep -Eo '[0-9]+[CH]' | awk '{ if (substr($0, 1, length($0)-1) > 0) print $0 }' | wc -l)
           if [ "$high_critical_vulns" -gt 0 ]; then
-            echo "High or critical vulnerabilities found"
+            docker rmi ${{ vars.DOCKERHUB_USERNAME }}/zad2:cacheTest ${{ steps.meta.outputs.tags }}Test
             exit 1
+          else
+            docker rmi ${{ vars.DOCKERHUB_USERNAME }}/zad2:cacheTest ${{ steps.meta.outputs.tags }}Test
           fi
 
 
