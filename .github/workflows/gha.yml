@@ -101,3 +101,7 @@ jobs:
           cache-to: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           tags: ${{ steps.meta.outputs.tags }}
+      - name: Delete Docker image from DockerHub
+        run: |
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker rmi -f ${{ secrets.DOCKERHUB_USERNAME }}/zad2:${{ steps.meta.outputs.tags }}Test
