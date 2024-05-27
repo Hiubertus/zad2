@@ -61,19 +61,9 @@ jobs:
           jq '.vulnerabilities | .[] | select(.severity == "HIGH" or .severity == "CRITICAL")' scout_report.json > high_critical_vulns.json
           if [ -s high_critical_vulns.json ]; then
             echo "High or critical vulnerabilities found"
-            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-            docker image rmi ${{ steps.meta.outputs.tags }}Test
-            docker image rmi ${{ vars.DOCKERHUB_USERNAME }}/zad2t:cacheTest
-            docker logout
             exit 1
-          else
-            echo "No high or critical vulnerabilities found"
-            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-            docker image rmi ${{ steps.meta.outputs.tags }}Test
-            docker image rmi ${{ vars.DOCKERHUB_USERNAME }}/zad2t:cacheTest
-            docker logout
           fi
-
+      
       - name: Push Docker image to DockerHub
         if: success()  # Only run if the previous step was successful
         uses: docker/build-push-action@v5
@@ -109,3 +99,8 @@ jobs:
           cache-to: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           tags: ${{ steps.meta.outputs.tags }}
+          
+      - name: Delete image
+        run: |
+          docker image rmi ${{ steps.meta.outputs.tags }}Test ${{ vars.DOCKERHUB_USERNAME }}/zad2t:cacheTest
+
