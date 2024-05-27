@@ -1,5 +1,3 @@
-name: GHAction
-
 on:
   workflow_dispatch:
   push:
