@@ -104,4 +104,5 @@ jobs:
       - name: Delete Docker image from DockerHub
         if: always()
         run: |
-          docker rmi -f ${{ vars.DOCKERHUB_USERNAME }}/zad2:cacheTest 
+          curl -X DELETE -u "${{ vars.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" https://index.docker.io/v1/repositories/${{ steps.meta.outputs.tags }}Test
+          curl -X DELETE -u "${{ vars.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" https://index.docker.io/v1/repositories/${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
