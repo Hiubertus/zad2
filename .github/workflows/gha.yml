@@ -59,7 +59,12 @@ jobs:
           relevant_part=$(echo "$output" | sed -n 's/.*│\(.*\)digest.*/\1/p')
           high_critical_vulns=$(echo "$relevant_part" | grep -Eo '[0-9]+[CH]' | awk '{ if (substr($0, 1, length($0)-1) > 0) print $0 }' | wc -l)
           if [ "$high_critical_vulns" -gt 0 ]; then
+            curl -X DELETE -u "${{ vars.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" https://index.docker.io/v1/repositories/${{ steps.meta.outputs.tags }}Test
+            curl -X DELETE -u "${{ vars.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" https://index.docker.io/v1/repositories/${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
             exit 1
+          else 
+            curl -X DELETE -u "${{ vars.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" https://index.docker.io/v1/repositories/${{ steps.meta.outputs.tags }}Test
+            curl -X DELETE -u "${{ vars.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" https://index.docker.io/v1/repositories/${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           fi
 
 
@@ -98,8 +103,3 @@ jobs:
           cache-to: |
             type=registry,ref=${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
           tags: ${{ steps.meta.outputs.tags }}
-      - name: Delete Docker image from DockerHub
-        if: always()
-        run: |
-          curl -X DELETE -u "${{ vars.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" https://index.docker.io/v1/repositories/${{ steps.meta.outputs.tags }}Test
-          curl -X DELETE -u "${{ vars.DOCKERHUB_USERNAME }}:${{ secrets.DOCKERHUB_TOKEN }}" https://index.docker.io/v1/repositories/${{ vars.DOCKERHUB_USERNAME }}/zad2:cache
