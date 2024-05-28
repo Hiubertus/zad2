@@ -59,10 +59,7 @@ jobs:
           relevant_part=$(echo "$output" | sed -n 's/.*│\(.*\)digest.*/\1/p')
           high_critical_vulns=$(echo "$relevant_part" | grep -Eo '[0-9]+[CH]' | awk '{ if (substr($0, 1, length($0)-1) > 0) print $0 }' | wc -l)
           if [ "$high_critical_vulns" -gt 0 ]; then
-            docker rmi ${{ vars.DOCKERHUB_USERNAME }}/zad2:cacheTest ${{ steps.meta.outputs.tags }}Test
             exit 1
-          else
-            docker rmi ${{ vars.DOCKERHUB_USERNAME }}/zad2:cacheTest ${{ steps.meta.outputs.tags }}Test
           fi
 
 
