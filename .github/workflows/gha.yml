@@ -64,7 +64,7 @@ jobs:
 
       - name: Login to GitHub Container Registry
         if: success()  # Only run if the previous step was successful
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
