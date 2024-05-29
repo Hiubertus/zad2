@@ -4,24 +4,24 @@ ADD ./alpine-mini.tar.gz /
 WORKDIR /app
 COPY /app .
 
-FROM nginx:mainline-alpine3.19-slim
-#FROM nginx:1.25.3-alpine3.18-perl
+# FROM nginx:mainline-alpine3.19-slim
+FROM nginx:1.25.3-alpine3.18-perl
 
 ARG VERSION
 ENV APP_VER=production.${VERSION:-v1.0}
 LABEL maintainer="Hubert Ozarowski s97692@pollub.edu.pl"
 
-# RUN apk add --no-cache npm curl
-RUN apk update && \
-    apk upgrade && \
-    apk add --no-cache \
-    nodejs-current=21.7.3-r0 \
-    npm=10.8.0-r0 \
-    curl=8.8.0-r0 \
-    busybox=1.36.1-r28 \ 
-    openssl=3.3.0-r2 \ 
-    --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
-    --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main
+RUN apk add --no-cache npm curl
+# RUN apk update && \
+#     apk upgrade && \
+#     apk add --no-cache \
+#     nodejs-current=21.7.3-r0 \
+#     npm=10.8.0-r0 \
+#     curl=8.8.0-r0 \
+#     busybox=1.36.1-r28 \ 
+#     openssl=3.3.0-r2 \ 
+#     --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community \
+#     --repository=http://dl-cdn.alpinelinux.org/alpine/edge/main
 
 WORKDIR /app
 COPY --from=builder /app .
