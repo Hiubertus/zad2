@@ -4,8 +4,8 @@ ADD ./alpine-mini.tar.gz /
 WORKDIR /app
 COPY /app .
 
-#FROM nginx:mainline-alpine3.19-slim
-FROM nginx:1.25.3-alpine3.18-perl
+FROM nginx:mainline-alpine3.19-slim
+#FROM nginx:1.25.3-alpine3.18-perl
 
 ARG VERSION
 ENV APP_VER=production.${VERSION:-v1.0}
