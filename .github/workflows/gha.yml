@@ -87,7 +87,7 @@ jobs:
             type=registry,ref=ghcr.io/${{ github.repository_owner }}/zad2:cache
           cache-to: |
             type=registry,ref=ghcr.io/${{ github.repository_owner }}/zad2:cache
-          tags: ghcr.io/${{ github.repository_owner }}/zad2:${{ steps.meta.outputs.tags }}
+          tags: ghcr.io/${{ github.repository_owner }}/zad2:latest
 
       # - name: Push Docker image to GitHub Container Registry
       #   if: success()  # Only run if the previous step was successful
