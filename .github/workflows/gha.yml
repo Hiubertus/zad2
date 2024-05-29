@@ -70,10 +70,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Build Inventory Image'
-        run: |
-            docker build . --tag ghcr.io/Hiubertus/zad2
-            docker push ghcr.io/Hiubertus/zad2:latest
+      # - name: 'Build Inventory Image'
+      #   run: |
+      #       docker build . --tag ghcr.io/hiubertus/zad2
+      #       docker push ghcr.io/hiubertus/zad2:latest
+
+      - name: Push Docker image to GitHub Container Registry
+        if: success()  # Only run if the previous step was successful
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          cache-from: |
+            type=registry,ref=ghcr.io/${{ github.repository_owner }}/zad2:cache
+          cache-to: |
+            type=registry,ref=ghcr.io/${{ github.repository_owner }}/zad2:cache
+          tags: ghcr.io/${{ github.repository_owner }}/zad2:${{ steps.meta.outputs.tags }}
 
       # - name: Push Docker image to GitHub Container Registry
       #   if: success()  # Only run if the previous step was successful
