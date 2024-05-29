@@ -1,6 +1,6 @@
 docker login
 
-docker scout repo enable --org patheticx patheticx/zad1
+docker scout repo enable --org patheticx patheticx/zad2
 
 docker buildx build \
 --platform linux/amd64,linux/arm64 \
@@ -9,8 +9,8 @@ docker buildx build \
 --sbom=true \
 --provenance=mode=max \
 --push \
--t patheticx/zad1:normal .
+-t patheticx/zad2:normal .
 
-docker scout cves patheticx/zad1:normal                          
+docker scout cves patheticx/zad2:normal                          
 
-docker run -p 8080:4000 patheticx/zad1:normal
+docker run -p 8080:4000 patheticx/zad2:normal
