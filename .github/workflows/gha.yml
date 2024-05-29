@@ -72,8 +72,8 @@ jobs:
 
       - name: 'Build Inventory Image'
         run: |
-            docker build . --tag ghcr.io/hiubertus/zad2
-            docker push ghcr.io/hiubertus/zad2:latest
+            docker build . --tag ghcr.io/Hiubertus/zad2
+            docker push ghcr.io/Hiubertus/zad2:latest
 
       # - name: Push Docker image to GitHub Container Registry
       #   if: success()  # Only run if the previous step was successful
